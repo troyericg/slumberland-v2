@@ -1,0 +1,7 @@
+Sat, 18 May 2013 11:35:19 -0400
+doc/README_FOR_APP	Sat, 18 May 2013 11:35:04 -0400
+app/controllers/application_controller.rb	Fri, 10 May 2013 18:34:19 -0400
+app/controllers/gallery_controller.rb	Sun, 12 May 2013 11:58:31 -0400
+app/helpers/application_helper.rb	Fri, 10 May 2013 18:34:19 -0400
+app/helpers/gallery_helper.rb	Sun, 12 May 2013 11:38:41 -0400
+app/models/comic.rb	Sun, 12 May 2013 11:06:54 -0400
