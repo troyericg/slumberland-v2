@@ -5,6 +5,7 @@ App.Views.Index = Backbone.View.extend({
 	initialize:function(models, options){
 		this.buildSlider();
 		this.render(this.collection);
+		this.bind("reset", this.render(this.collection));
 	},
 	render:function(entries){
 		root = this;
@@ -30,9 +31,11 @@ App.Views.Index = Backbone.View.extend({
 			max: 1914,
 			values: [1905, 1914],
 			slide: function(event, ui) {
+				console.log(ui.values[0] +  " - " + ui.values[1]);
 				//$("#amount").val("$" + ui.values[0] + " - $" + ui.values[1]);
 			},
 			change: function(event, ui) {
+				console.log(ui.values[0] +  " - " + ui.values[1]);
 				//Slumberland.rangeFilter('year',ui.values[0], ui.values[1]);
 			}
 		});
