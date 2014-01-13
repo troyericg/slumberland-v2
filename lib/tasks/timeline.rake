@@ -66,13 +66,14 @@ task :timeline => :environment do
 					"count" => "0"
 				}
 
-				if tmpHsh["year"] == tr["year"] && tmpHsh["name"] == tr["name"]
+				if tmpHsh["year"] == tr["year"] && tmpHsh["name"] == tr["name"] && !tmpHsh["exists"]
 					tmpHsh["count"] = tr["count"]
+					tmpHsh["exists"] = true
 				else
-					tmpHsh = nil
+					tmpHsh["exists"] = false
 				end
 
-				if tmpHsh != nil
+				if tmpHsh["exists"] != false
 					arrFull << tmpHsh
 				end
 			end
