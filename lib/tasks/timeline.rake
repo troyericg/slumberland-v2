@@ -8,20 +8,7 @@ task :timeline => :environment do
 	comicYears = []
 	contentsArray = []
 
-	def runYears(data, arr, years)
-		sYears = years.map{ |yr| yr.to_s }
-
-		data.each do |strip|
-			year = strip["date_display"].split("-")[-1]
-			arr << year
-		end
-
-		arr.each do |yr|
-			puts yr
-		end
-	end
-
-	def gatherThemes(data, arr, years)
+	def gatherThemes(data, arr, years, search_term)
 		data.each do |strip|
 			year = strip["date_display"].split("-")[-1]
 			contents = strip["contents"]
@@ -37,16 +24,16 @@ task :timeline => :environment do
 			end
 		end
 
-		# puts arr.length
 		
 		c = Hash.new(0)
 
 		arr.each do |v|
 			c[v] += 1
-		end	
+		end
 
 		arrC = c.to_a
 		arrTrim = arr.uniq
+
 
 		arrTrim.zip(arrC).each do |trim, num|
 
@@ -55,51 +42,68 @@ task :timeline => :environment do
 			end
 		end
 
-		arrFull = []
+		arrFull = [] # for hashes that have count values 
+		arrBig = [] # for full array of hashes
 
+		# creates the hashes and adds them to the 2 arrays, one for counted terms and one for all terms
 		arrTrim.each do |tr|
 
 			years.each do |yr|
 				tmpHsh = {
 					"year" => yr.to_s,
 					"name" => tr["name"],
-					"count" => "0"
+					"count" => "0",
+					"exists" => false
 				}
 
-				if tmpHsh["year"] == tr["year"] && tmpHsh["name"] == tr["name"] && !tmpHsh["exists"]
+				if tmpHsh["year"] == tr["year"] && tmpHsh["name"] == tr["name"] && tmpHsh["exists"] != true
 					tmpHsh["count"] = tr["count"]
 					tmpHsh["exists"] = true
-				else
-					tmpHsh["exists"] = false
 				end
 
 				if tmpHsh["exists"] != false
 					arrFull << tmpHsh
+					arrBig << tmpHsh
+				else 
+					arrBig << tmpHsh
 				end
 			end
-
 		end
 
-		# arrFull.uniq.sort_by{ |v| v["year"] }.group_by{ |w| w["name"] }.each do |key, grp|
-		# 	grp.each{ |itm| puts itm }
-		# end
-
-		arrFull.uniq.each do |term|
-			if term["name"] == "Falling"
-				puts "\'#{term['name']}\', occurred #{term['count']} times in #{term['year']}"
+		#goes over full array and deletes duplicate items
+		arrFull.each do |counted_item|
+			arrBig.delete_if do |item|
+				item["year"] == counted_item["year"] && item["name"] == counted_item["name"] && item["count"].to_i < counted_item["count"].to_i
 			end
 		end
 
-		# b = arr.inject(Hash.new(0)) {|h,i| h[i] += 1; h }
-		# b.sort_by{|key, value| value}.to_a.each do |label,count| 
-		# 	if count > 9
-		# 		puts "#{label}: #{count}" 
-		# 	end
-		# end
+		# sorts the final array and outputs items based on search term
+		arrBig.uniq.sort!{ |a,b| a["year"] <=> b["year"] }.each do |term|
+			# puts term["name"]
+			if term["name"] == search_term
+				puts "\'#{term['name']}\', occurred #{term['count']} times in #{term['year']}."
+			end
+		end
+
 	end
-	
-	gatherThemes(comicData, contentsArray, years)
-	#runYears(comicData, comicYears, years)
+
+
+	test_terms = [
+		"sunrises & sunsets", # 0
+		"race discrimination", # 1
+		"falling", # 2
+		"costumes", # 3
+		"forests", # 4
+		"decapitations", # 5
+		"ethnic stereotypes", # 6
+		"gems", # 7
+		"crying", # 8
+		"candy", # 9
+		"marching bands", # 10
+		"sailors" # 11
+	]
+
+	gatherThemes(comicData, contentsArray, years, test_terms[8])
 	
 
 end
