@@ -2,13 +2,17 @@ require 'date'
 
 task :timeline => :environment do
 
-
+	
 	years = [1905,1906,1907,1908,1909,1910,1911,1912,1913,1914]
 	comicData = Comic.ordered.limited.all
 	comicYears = []
 	contentsArray = []
 
 	def gatherThemes(data, arr, years, search_term)
+
+		arg_term = ARGV.last
+		task arg_term.to_sym do ; end
+
 		data.each do |strip|
 			year = strip["date_display"].split("-")[-1]
 			contents = strip["contents"]
@@ -79,8 +83,8 @@ task :timeline => :environment do
 
 		# sorts the final array and outputs items based on search term
 		arrBig.uniq.sort!{ |a,b| a["year"] <=> b["year"] }.each do |term|
-			# puts term["name"]
-			if term["name"] == search_term
+			
+			if term["name"].downcase == arg_term #switch to search_term to avoid argv
 				puts "\'#{term['name']}\', occurred #{term['count']} times in #{term['year']}."
 			end
 		end
@@ -103,7 +107,7 @@ task :timeline => :environment do
 		"sailors" # 11
 	]
 
-	gatherThemes(comicData, contentsArray, years, test_terms[8])
+	gatherThemes(comicData, contentsArray, years, test_terms[0])
 	
 
 end
