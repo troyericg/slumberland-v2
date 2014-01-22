@@ -9,6 +9,17 @@ namespace :setup do
 		puts "NOTE: This will eventually build and populate a separate table for the timeline data"
 		puts "---------------------"
 		puts 
+
+		# Starter variables 
+		arg_term = ARGV.last
+		task arg_term.to_sym do ; end
+
+		years = [1905,1906,1907,1908,1909,1910,1911,1912,1913,1914]
+		comicData = Comic.ordered.all # all data from database 
+		comicYears = [] # stores initial list of years 
+		contentsArray = [] # stores initial comic data hashes 
+		arrFull = [] # for hashes that have count values 
+		arrBig = [] # for full array of hashes
 	end
 
 
@@ -20,11 +31,13 @@ namespace :setup do
 	desc "Creates a proper count of occurences across years"
 	task :test_timeline => :environment do
 
+
+		# Starter variables 
 		arg_term = ARGV.last
 		task arg_term.to_sym do ; end
 
 		years = [1905,1906,1907,1908,1909,1910,1911,1912,1913,1914]
-		comicData = Comic.ordered.limited.all # data from database 
+		comicData = Comic.ordered.limited.all # limited data from database 
 		comicYears = [] # stores initial list of years 
 		contentsArray = [] # stores initial comic data hashes 
 		arrFull = [] # for hashes that have count values 
