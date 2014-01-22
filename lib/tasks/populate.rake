@@ -4,7 +4,7 @@ require 'nokogiri'
 require 'open-uri'
 
 namespace :db do
-  desc "Putting data in the datbase"
+  desc "Scrapes data from Comic Strip Library and adds it to the database"
   task :populate => :environment do
     
     #Set up basic variables

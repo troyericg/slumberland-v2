@@ -1,9 +1,9 @@
 require 'rest-client'
 require 'open-uri'
 
-namespace :db do
-	desc "Putting data in the database"
-	task :makejson => :environment do
+namespace :export do
+	desc "Generates json from database and saves to a separate file"
+	task :as_json => :environment do
 
 		fname = "db/comic_data.json"
 		comicData = Comic.all
